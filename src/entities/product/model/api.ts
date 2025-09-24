@@ -3,9 +3,9 @@ import type { IProduct } from './types';
 
 const products: IProduct[] = [
     { id: 1, label: 'Молоко', isChecked: false },
-    // { id: 2, label: 'Сахар', isChecked: false },
-    // { id: 3, label: 'Бананы', isChecked: false },
-    // { id: 4, label: 'Йогурт', isChecked: false },
+    { id: 2, label: 'Сахар', isChecked: false },
+    { id: 3, label: 'Бананы', isChecked: false },
+    { id: 4, label: 'Йогурт', isChecked: false },
     // { id: 5, label: 'Пуддинг', isChecked: false },
     // { id: 6, label: 'Яблоко', isChecked: false },
     // { id: 7, label: 'Хлеб', isChecked: false },
@@ -39,7 +39,9 @@ async function updateProduct(data: IProduct): Promise<void> {
             res();
         }, 2000);
     });
-    throw new Error('не удалось отрелактировать');
+    if (Math.random() < 5) {
+        throw new Error('не удалось отрелактировать');
+    }
     const needIndex = products.findIndex(product => product.id === data.id);
     if (needIndex > -1) {
         products[needIndex] = data;
@@ -68,8 +70,8 @@ export const productsApi = createApi({
                 try {
                     await updateProduct(product);
                     return { data: '' };
-                } catch (error) {
-                    return { error: error.message };
+                } catch {
+                    return { error: { message: 'Редактирование не удалось' } };
                 }
             },
             async onQueryStarted(

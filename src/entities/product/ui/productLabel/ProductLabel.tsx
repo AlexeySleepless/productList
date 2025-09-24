@@ -20,6 +20,7 @@ export const ProductLabel: React.FunctionComponent<IProductLabelProps> = ({
                             fontSize: '1rem',
                             color: isChecked ? 'gray' : 'inherit',
                             userSelect: 'none',
+                            textDecoration: isChecked ? 'line-through' : 'none',
                         },
                     },
                 }}

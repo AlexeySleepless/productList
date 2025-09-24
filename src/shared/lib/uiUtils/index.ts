@@ -1,0 +1,1 @@
+export { useLastError } from './useLastError';

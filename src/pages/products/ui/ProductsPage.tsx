@@ -1,13 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import {
-    Box,
-    Typography,
-    //useMediaQuery,
-    useTheme,
-    Paper,
-    Stack,
-    Divider,
-} from '@mui/material';
+import { Box, Typography, Paper, Stack, Divider } from '@mui/material';
 import { ProductsFilters, type IFilters } from '@features/productsFilter';
 import { sorts } from '@features/productsFilter/model/types';
 import {
@@ -17,6 +9,8 @@ import {
     type IProduct,
 } from '@entities/product';
 import { UpdateWrapper } from '@features/updateProduct';
+import { useLastError } from '@shared/lib/uiUtils';
+import { ErrorAlert } from '@shared/ui/errorAlert';
 
 export const ProductsPage: React.FunctionComponent = () => {
     const [filters, setFilters] = useState<IFilters>({
@@ -24,18 +18,11 @@ export const ProductsPage: React.FunctionComponent = () => {
         sortType: sorts.NONE,
     });
 
-    //const [items, setItems] = useState<IProduct[]>(itemsData);
-
-    // const { products, isLoading, error } = useAppSelector(
-    //     state => state.productsReducer,
-    // );
-
     const { data: products = [] } = productsApi.useFetchAllProductsQuery('', {
         selectFromResult: ({ data }) => ({ data }),
     });
 
-    const theme = useTheme();
-    //const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    const { openFlag, errorMessage, closeError, triggerError } = useLastError();
 
     // const handleToggle = (id: number) => {
     //     const newItems = items.map(item =>
@@ -93,6 +80,11 @@ export const ProductsPage: React.FunctionComponent = () => {
                 gap: 2,
             }}
         >
+            <ErrorAlert
+                open={openFlag}
+                message={errorMessage}
+                onClose={closeError}
+            />
             <ProductsFilters {...{ filters, setFilters }} />
 
             <Paper
@@ -101,7 +93,6 @@ export const ProductsPage: React.FunctionComponent = () => {
                     overflowY: 'auto',
                     flexGrow: 1,
                     borderRadius: 3,
-                    bgcolor: theme.palette.background.default,
                 }}
             >
                 <Stack sx={{ padding: 0 }}>
@@ -109,7 +100,10 @@ export const ProductsPage: React.FunctionComponent = () => {
                         <>
                             {uncheked.map(product => {
                                 const updateAction = (
-                                    <UpdateWrapper product={product}>
+                                    <UpdateWrapper
+                                        product={product}
+                                        onError={triggerError}
+                                    >
                                         <ProductLabel product={product} />
                                     </UpdateWrapper>
                                 );
