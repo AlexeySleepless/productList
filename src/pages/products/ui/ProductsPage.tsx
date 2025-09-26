@@ -1,16 +1,12 @@
-import React, { useMemo, useState } from 'react';
-import { Box, Typography, Paper, Stack, Divider } from '@mui/material';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Box } from '@mui/material';
 import { ProductsFilters, type IFilters } from '@features/productsFilter';
 import { sorts } from '@features/productsFilter/model/types';
-import {
-    Product,
-    ProductLabel,
-    productsApi,
-    type IProduct,
-} from '@entities/product';
-import { UpdateWrapper } from '@features/updateProduct';
-import { useLastError } from '@shared/lib/uiUtils';
+import { productsApi, type IProduct } from '@entities/product';
+import { useLastError, useManageModal } from '@shared/lib/uiUtils';
 import { ErrorAlert } from '@shared/ui/errorAlert';
+import { ConfirmModal } from '@shared/ui/confirmModal';
+import { ProductsList } from '@widgets/productsList';
 
 export const ProductsPage: React.FunctionComponent = () => {
     const [filters, setFilters] = useState<IFilters>({
@@ -23,6 +19,12 @@ export const ProductsPage: React.FunctionComponent = () => {
     });
 
     const { openFlag, errorMessage, closeError, triggerError } = useLastError();
+
+    const { open, message, triggerConfirm, confirmAction, closeConfirm } =
+        useManageModal();
+
+    const memoTriggerConfirm = useCallback(triggerConfirm, []);
+    const memoTriggerError = useCallback(triggerError, []);
 
     // const handleToggle = (id: number) => {
     //     const newItems = items.map(item =>
@@ -48,7 +50,7 @@ export const ProductsPage: React.FunctionComponent = () => {
     //     setItems(newItems);
     // };
 
-    const [checked, uncheked] = useMemo<[IProduct[], IProduct[]]>(() => {
+    const [checked, unchecked] = useMemo<[IProduct[], IProduct[]]>(() => {
         const checked: IProduct[] = [];
         const uncheked: IProduct[] = [];
 
@@ -85,62 +87,21 @@ export const ProductsPage: React.FunctionComponent = () => {
                 message={errorMessage}
                 onClose={closeError}
             />
+            <ConfirmModal
+                open={open}
+                closeDialog={closeConfirm}
+                executeFn={confirmAction}
+                message={message}
+            />
             <ProductsFilters {...{ filters, setFilters }} />
-
-            <Paper
-                elevation={2}
-                sx={{
-                    overflowY: 'auto',
-                    flexGrow: 1,
-                    borderRadius: 3,
+            <ProductsList
+                {...{
+                    checked,
+                    unchecked,
+                    triggerConfirm: memoTriggerConfirm,
+                    triggerError: memoTriggerError,
                 }}
-            >
-                <Stack sx={{ padding: 0 }}>
-                    {checked.length || uncheked.length ? (
-                        <>
-                            {uncheked.map(product => {
-                                const updateAction = (
-                                    <UpdateWrapper
-                                        product={product}
-                                        onError={triggerError}
-                                    >
-                                        <ProductLabel product={product} />
-                                    </UpdateWrapper>
-                                );
-                                return (
-                                    <Product
-                                        key={product.id}
-                                        {...{ product }}
-                                        updateAction={updateAction}
-                                    />
-                                );
-                            })}
-                            <Divider
-                                sx={{
-                                    marginBlock: 2,
-                                    borderBottomWidth: 2,
-                                    display:
-                                        checked.length && uncheked.length
-                                            ? 'block'
-                                            : 'none',
-                                }}
-                                variant="middle"
-                            />
-                            {checked.map(product => (
-                                <Product key={product.id} {...{ product }} />
-                            ))}
-                        </>
-                    ) : (
-                        <Typography
-                            color="text.secondary"
-                            align="center"
-                            sx={{ py: 4, fontStyle: 'italic' }}
-                        >
-                            Ничего не найдено
-                        </Typography>
-                    )}
-                </Stack>
-            </Paper>
+            />
         </Box>
     );
 };

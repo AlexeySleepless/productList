@@ -29,6 +29,7 @@ import { ProductLabel } from './productLabel/ProductLabel';
 interface IProductProps {
     product: IProduct;
     updateAction?: React.ReactNode;
+    deleteAction?: React.ReactNode;
     handleToggle?: (id: number) => void;
 }
 
@@ -36,6 +37,7 @@ export const Product: React.FunctionComponent<IProductProps> = ({
     product,
     handleToggle,
     updateAction,
+    deleteAction,
 }) => {
     const { isChecked } = product;
     const theme = useTheme();
@@ -197,7 +199,7 @@ export const Product: React.FunctionComponent<IProductProps> = ({
 
             {readyTexField}
 
-            {deleteProductFeature}
+            {deleteAction}
         </ListItem>
     );
 };

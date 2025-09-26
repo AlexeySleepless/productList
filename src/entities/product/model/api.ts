@@ -48,6 +48,21 @@ async function updateProduct(data: IProduct): Promise<void> {
     }
 }
 
+async function deleteProduct(id: number): Promise<void> {
+    await new Promise<void>(res => {
+        setTimeout(() => {
+            res();
+        }, 2000);
+    });
+    if (Math.random() < 5) {
+        throw new Error('не удалось удалить');
+    }
+    const needIndex = products.findIndex(product => product.id === id);
+    if (needIndex > -1) {
+        products.splice(needIndex, 1);
+    }
+}
+
 const productsTag = 'products';
 export const productsApi = createApi({
     reducerPath: 'productsApi',
@@ -78,13 +93,13 @@ export const productsApi = createApi({
                 product: IProduct,
                 { dispatch, queryFulfilled },
             ) {
-                dispatch(
-                    productsApi.endpoints.fetchAllProducts.initiate('', {
-                        subscriptionOptions: {
-                            pollingInterval: 0,
-                        },
-                    }),
-                );
+                // dispatch(
+                //     productsApi.endpoints.fetchAllProducts.initiate('', {
+                //         subscriptionOptions: {
+                //             pollingInterval: 0,
+                //         },
+                //     }),
+                // );
                 const patchResult = dispatch(
                     productsApi.util.updateQueryData(
                         'fetchAllProducts',
@@ -95,6 +110,40 @@ export const productsApi = createApi({
                             );
                             if (index > -1) {
                                 Object.assign(draft[index], product);
+                            }
+                        },
+                    ),
+                );
+                try {
+                    console.log('ждем');
+                    await queryFulfilled;
+                } catch {
+                    console.log('откат');
+                    patchResult.undo();
+                }
+            },
+            invalidatesTags: [productsTag],
+        }),
+        deleteProduct: build.mutation<unknown, number>({
+            queryFn: async (id: number) => {
+                try {
+                    await deleteProduct(id);
+                    return { data: '' };
+                } catch {
+                    return { error: { message: 'Удаление не удалось' } };
+                }
+            },
+            async onQueryStarted(id: number, { dispatch, queryFulfilled }) {
+                const patchResult = dispatch(
+                    productsApi.util.updateQueryData(
+                        'fetchAllProducts',
+                        '',
+                        draft => {
+                            const index = draft.findIndex(
+                                item => item.id == id,
+                            );
+                            if (index > -1) {
+                                draft.splice(index, 1);
                             }
                         },
                     ),
