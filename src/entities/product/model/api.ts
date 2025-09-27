@@ -39,9 +39,9 @@ async function updateProduct(data: IProduct): Promise<void> {
             res();
         }, 2000);
     });
-    if (Math.random() < 5) {
-        throw new Error('не удалось отрелактировать');
-    }
+    // if (Math.random() < 5) {
+    //     throw new Error('не удалось отрелактировать');
+    // }
     const needIndex = products.findIndex(product => product.id === data.id);
     if (needIndex > -1) {
         products[needIndex] = data;
@@ -54,9 +54,9 @@ async function deleteProduct(id: number): Promise<void> {
             res();
         }, 2000);
     });
-    if (Math.random() < 5) {
-        throw new Error('не удалось удалить');
-    }
+    // if (Math.random() < 5) {
+    //     throw new Error('не удалось удалить');
+    // }
     const needIndex = products.findIndex(product => product.id === id);
     if (needIndex > -1) {
         products.splice(needIndex, 1);
@@ -117,12 +117,14 @@ export const productsApi = createApi({
                 try {
                     console.log('ждем');
                     await queryFulfilled;
+                    console.log('применяем исходники');
                 } catch {
                     console.log('откат');
                     patchResult.undo();
+                    dispatch(productsApi.util.invalidateTags([productsTag]));
                 }
             },
-            invalidatesTags: [productsTag],
+            //invalidatesTags: [productsTag],
         }),
         deleteProduct: build.mutation<unknown, number>({
             queryFn: async (id: number) => {
@@ -151,12 +153,13 @@ export const productsApi = createApi({
                 try {
                     console.log('ждем');
                     await queryFulfilled;
+                    console.log('применяем исходники');
                 } catch {
                     console.log('откат');
                     patchResult.undo();
+                    dispatch(productsApi.util.invalidateTags([productsTag]));
                 }
             },
-            invalidatesTags: [productsTag],
         }),
     }),
 });

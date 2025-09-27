@@ -1,5 +1,6 @@
 import { Product, ProductLabel, type IProduct } from '@entities/product';
 import { DeleteProduct } from '@features/deleteProduct';
+import { ToggleProduct } from '@features/toggleProduct';
 import { UpdateWrapper } from '@features/updateProduct';
 import { Divider, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
@@ -9,6 +10,18 @@ interface IProductsListProps {
     unchecked: IProduct[];
     triggerError?: (arg: string) => void;
     triggerConfirm?: (arg1: () => Promise<void>, arg2: string) => void;
+}
+
+function reverseMap<Input, Output>(
+    arr: Input[],
+    callback: (value: Input, index: number, array: Input[]) => Output,
+): Output[] {
+    const result: Output[] = [];
+    for (let i = arr.length - 1; i >= 0; i--) {
+        const value: Output = callback(arr[i], i, arr);
+        result.push(value);
+    }
+    return result;
 }
 
 export const ProductsList: React.FunctionComponent<IProductsListProps> =
@@ -25,8 +38,7 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                 <Stack sx={{ padding: 0 }}>
                     {checked.length || unchecked.length ? (
                         <>
-                            {unchecked.map(product => {
-                                console.log(product.label);
+                            {reverseMap(unchecked, product => {
                                 const updateAction = (
                                     <UpdateWrapper
                                         product={product}
@@ -42,15 +54,60 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                                         product={product}
                                     />
                                 );
+
+                                const toggleAction = (
+                                    <ToggleProduct
+                                        triggerError={triggerError}
+                                        product={product}
+                                    />
+                                );
                                 return (
                                     <Product
                                         key={product.id}
-                                        {...{ product }}
-                                        updateAction={updateAction}
-                                        deleteAction={deleteAction}
+                                        {...{
+                                            product,
+                                            updateAction,
+                                            deleteAction,
+                                            toggleAction,
+                                        }}
                                     />
                                 );
                             })}
+                            {/* {unchecked.map(product => {
+                                const updateAction = (
+                                    <UpdateWrapper
+                                        product={product}
+                                        onError={triggerError}
+                                    >
+                                        <ProductLabel product={product} />
+                                    </UpdateWrapper>
+                                );
+                                const deleteAction = (
+                                    <DeleteProduct
+                                        triggerConfirm={triggerConfirm}
+                                        triggerError={triggerError}
+                                        product={product}
+                                    />
+                                );
+
+                                const toggleAction = (
+                                    <ToggleProduct
+                                        triggerError={triggerError}
+                                        product={product}
+                                    />
+                                );
+                                return (
+                                    <Product
+                                        key={product.id}
+                                        {...{
+                                            product,
+                                            updateAction,
+                                            deleteAction,
+                                            toggleAction,
+                                        }}
+                                    />
+                                );
+                            })} */}
                             <Divider
                                 sx={{
                                     marginBlock: 2,
@@ -62,9 +119,31 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                                 }}
                                 variant="middle"
                             />
-                            {checked.map(product => (
-                                <Product key={product.id} {...{ product }} />
-                            ))}
+                            {checked.map(product => {
+                                const toggleAction = (
+                                    <ToggleProduct
+                                        triggerError={triggerError}
+                                        product={product}
+                                    />
+                                );
+                                const deleteAction = (
+                                    <DeleteProduct
+                                        triggerConfirm={triggerConfirm}
+                                        triggerError={triggerError}
+                                        product={product}
+                                    />
+                                );
+                                return (
+                                    <Product
+                                        key={product.id}
+                                        {...{
+                                            product,
+                                            toggleAction,
+                                            deleteAction,
+                                        }}
+                                    />
+                                );
+                            })}
                         </>
                     ) : (
                         <Typography

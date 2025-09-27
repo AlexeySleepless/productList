@@ -7,6 +7,16 @@ import {
     type DialogProps,
 } from '@mui/material';
 
+// import type { TransitionProps } from '@mui/material/transitions';
+// import type { JSX } from '@emotion/react/jsx-runtime';
+
+// const Transition = React.forwardRef(function Transition(
+//     props: TransitionProps & { children: JSX.Element },
+//     ref: React.Ref<unknown>,
+// ) {
+//     return <Slide direction="up" ref={ref} {...props} />;
+// });
+
 interface IConfirmModalProps extends DialogProps {
     message: string;
     executeFn?: (() => void) | null;
