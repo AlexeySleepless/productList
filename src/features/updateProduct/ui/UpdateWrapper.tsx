@@ -5,8 +5,8 @@ import classes from './UpdateWrapper.module.css';
 
 interface IUPdateWrapper {
     product: IProduct;
-    onError?: (arg: string) => void;
     readonly children: React.ReactNode;
+    onError?: (arg: string) => void;
 }
 
 export const UpdateWrapper: React.FunctionComponent<IUPdateWrapper> = ({
@@ -30,9 +30,9 @@ export const UpdateWrapper: React.FunctionComponent<IUPdateWrapper> = ({
                 behavior: 'smooth',
                 block: 'nearest',
             });
+            input.focus();
         }, 200);
         const textLen = input.value.length;
-        input.focus();
         input.setSelectionRange(textLen, textLen);
         return id;
     };

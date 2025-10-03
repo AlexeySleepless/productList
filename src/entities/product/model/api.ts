@@ -63,6 +63,15 @@ async function deleteProduct(id: number): Promise<void> {
     }
 }
 
+async function createProduct(data: IProduct): Promise<void> {
+    await new Promise<void>(res => {
+        setTimeout(() => {
+            res();
+        }, 2000);
+    });
+    products.push(data);
+}
+
 const productsTag = 'products';
 export const productsApi = createApi({
     reducerPath: 'productsApi',
@@ -147,6 +156,39 @@ export const productsApi = createApi({
                             if (index > -1) {
                                 draft.splice(index, 1);
                             }
+                        },
+                    ),
+                );
+                try {
+                    console.log('ждем');
+                    await queryFulfilled;
+                    console.log('применяем исходники');
+                } catch {
+                    console.log('откат');
+                    patchResult.undo();
+                    dispatch(productsApi.util.invalidateTags([productsTag]));
+                }
+            },
+        }),
+        createProduct: build.mutation<unknown, IProduct>({
+            queryFn: async (data: IProduct) => {
+                try {
+                    await createProduct(data);
+                    return { data: '' };
+                } catch {
+                    return { error: { message: 'Создание не удалось' } };
+                }
+            },
+            async onQueryStarted(
+                product: IProduct,
+                { dispatch, queryFulfilled },
+            ) {
+                const patchResult = dispatch(
+                    productsApi.util.updateQueryData(
+                        'fetchAllProducts',
+                        '',
+                        draft => {
+                            draft.push(product);
                         },
                     ),
                 );

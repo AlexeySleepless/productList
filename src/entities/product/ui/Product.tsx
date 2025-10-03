@@ -1,7 +1,7 @@
-import { alpha, ListItem, useTheme } from '@mui/material';
 import type { IProduct } from '../model/types';
 import React from 'react';
 import { ProductLabel } from './productLabel/ProductLabel';
+import { StyledListItem } from '@shared/ui/styledListItem';
 
 interface IProductProps {
     product: IProduct;
@@ -16,8 +16,6 @@ export const Product: React.FunctionComponent<IProductProps> = ({
     deleteAction,
     toggleAction,
 }) => {
-    const theme = useTheme();
-
     const readyTexField = updateAction ? (
         updateAction
     ) : (
@@ -25,29 +23,10 @@ export const Product: React.FunctionComponent<IProductProps> = ({
     );
 
     return (
-        <ListItem
-            disablePadding
-            sx={{
-                padding: '5px',
-                alignItems: 'stretch',
-                '&:hover': {
-                    backgroundColor: alpha(theme.palette.primary.main, 0.15),
-                },
-                '@media (pointer: coarse)': {
-                    '&:hover': {
-                        backgroundColor: 'transparent',
-                    },
-                    '&:focus-visible': {
-                        backgroundColor: 'transparent',
-                    },
-                },
-            }}
-        >
+        <StyledListItem>
             {toggleAction}
-
             {readyTexField}
-
             {deleteAction}
-        </ListItem>
+        </StyledListItem>
     );
 };

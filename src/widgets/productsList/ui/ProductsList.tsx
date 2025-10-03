@@ -1,4 +1,5 @@
 import { Product, ProductLabel, type IProduct } from '@entities/product';
+import { CreateProduct } from '@features/createProduct';
 import { DeleteProduct } from '@features/deleteProduct';
 import { ToggleProduct } from '@features/toggleProduct';
 import { UpdateWrapper } from '@features/updateProduct';
@@ -36,6 +37,7 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                 }}
             >
                 <Stack sx={{ padding: 0 }}>
+                    <CreateProduct triggerError={triggerError} />
                     {checked.length || unchecked.length ? (
                         <>
                             {reverseMap(unchecked, product => {
