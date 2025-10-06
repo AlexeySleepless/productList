@@ -26,30 +26,6 @@ export const ProductsPage: React.FunctionComponent = () => {
     const memoTriggerConfirm = useCallback(triggerConfirm, []);
     const memoTriggerError = useCallback(triggerError, []);
 
-    // const handleToggle = (id: number) => {
-    //     const newItems = items.map(item =>
-    //         item.id === id
-    //             ? {
-    //                   ...item,
-    //                   isChecked: !item.isChecked,
-    //               }
-    //             : item,
-    //     );
-    //     setItems(newItems);
-    // };
-
-    // const editLabel = (id: number, label: string) => {
-    //     const newItems = items.map(item =>
-    //         item.id === id
-    //             ? {
-    //                   ...item,
-    //                   label,
-    //               }
-    //             : item,
-    //     );
-    //     setItems(newItems);
-    // };
-
     const [checked, unchecked] = useMemo<[IProduct[], IProduct[]]>(() => {
         const checked: IProduct[] = [];
         const uncheked: IProduct[] = [];
