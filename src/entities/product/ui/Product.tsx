@@ -22,6 +22,7 @@ export const Product: React.FunctionComponent<IProductProps> = ({
         <ProductLabel product={product} />
     );
 
+    console.log('rerender', product.label);
     return (
         <StyledListItem>
             {toggleAction}

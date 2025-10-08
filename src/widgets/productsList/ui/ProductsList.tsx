@@ -1,10 +1,9 @@
-import { Product, ProductLabel, type IProduct } from '@entities/product';
+import { type IProduct } from '@entities/product';
 import { CreateProduct } from '@features/createProduct';
-import { DeleteProduct } from '@features/deleteProduct';
-import { ToggleProduct } from '@features/toggleProduct';
-import { UpdateWrapper } from '@features/updateProduct';
 import { Divider, Paper, Stack, Typography } from '@mui/material';
 import React from 'react';
+import { MemoCheckedProduct } from './MemoCheckedProduct';
+import { MemoUncheckedProduct } from './MemoUncheckedProduct';
 
 interface IProductsListProps {
     checked: IProduct[];
@@ -40,76 +39,14 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                     <CreateProduct triggerError={triggerError} />
                     {checked.length || unchecked.length ? (
                         <>
-                            {reverseMap(unchecked, product => {
-                                const updateAction = (
-                                    <UpdateWrapper
-                                        product={product}
-                                        onError={triggerError}
-                                    >
-                                        <ProductLabel product={product} />
-                                    </UpdateWrapper>
-                                );
-                                const deleteAction = (
-                                    <DeleteProduct
-                                        triggerConfirm={triggerConfirm}
-                                        triggerError={triggerError}
-                                        product={product}
-                                    />
-                                );
-
-                                const toggleAction = (
-                                    <ToggleProduct
-                                        triggerError={triggerError}
-                                        product={product}
-                                    />
-                                );
-                                return (
-                                    <Product
-                                        key={product.id}
-                                        {...{
-                                            product,
-                                            updateAction,
-                                            deleteAction,
-                                            toggleAction,
-                                        }}
-                                    />
-                                );
-                            })}
-                            {/* {unchecked.map(product => {
-                                const updateAction = (
-                                    <UpdateWrapper
-                                        product={product}
-                                        onError={triggerError}
-                                    >
-                                        <ProductLabel product={product} />
-                                    </UpdateWrapper>
-                                );
-                                const deleteAction = (
-                                    <DeleteProduct
-                                        triggerConfirm={triggerConfirm}
-                                        triggerError={triggerError}
-                                        product={product}
-                                    />
-                                );
-
-                                const toggleAction = (
-                                    <ToggleProduct
-                                        triggerError={triggerError}
-                                        product={product}
-                                    />
-                                );
-                                return (
-                                    <Product
-                                        key={product.id}
-                                        {...{
-                                            product,
-                                            updateAction,
-                                            deleteAction,
-                                            toggleAction,
-                                        }}
-                                    />
-                                );
-                            })} */}
+                            {reverseMap(unchecked, product => (
+                                <MemoUncheckedProduct
+                                    key={product.id}
+                                    product={product}
+                                    triggerConfirm={triggerConfirm}
+                                    triggerError={triggerError}
+                                />
+                            ))}
                             <Divider
                                 sx={{
                                     marginBlock: 2,
@@ -121,31 +58,14 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                                 }}
                                 variant="middle"
                             />
-                            {checked.map(product => {
-                                const toggleAction = (
-                                    <ToggleProduct
-                                        triggerError={triggerError}
-                                        product={product}
-                                    />
-                                );
-                                const deleteAction = (
-                                    <DeleteProduct
-                                        triggerConfirm={triggerConfirm}
-                                        triggerError={triggerError}
-                                        product={product}
-                                    />
-                                );
-                                return (
-                                    <Product
-                                        key={product.id}
-                                        {...{
-                                            product,
-                                            toggleAction,
-                                            deleteAction,
-                                        }}
-                                    />
-                                );
-                            })}
+                            {checked.map(product => (
+                                <MemoCheckedProduct
+                                    key={product.id}
+                                    product={product}
+                                    triggerConfirm={triggerConfirm}
+                                    triggerError={triggerError}
+                                />
+                            ))}
                         </>
                     ) : (
                         <Typography
