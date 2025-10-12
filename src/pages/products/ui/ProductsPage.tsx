@@ -14,9 +14,11 @@ export const ProductsPage: React.FunctionComponent = () => {
         sortType: sorts.NONE,
     });
 
-    const { data: products = [] } = productsApi.useFetchAllProductsQuery('', {
+    const { data } = productsApi.useFetchAllProductsQuery('', {
         selectFromResult: ({ data }) => ({ data }),
     });
+
+    const { order } = data ?? { order: [] };
 
     const { openFlag, errorMessage, closeError, triggerError } = useLastError();
 
@@ -30,7 +32,7 @@ export const ProductsPage: React.FunctionComponent = () => {
         const checked: IProduct[] = [];
         const uncheked: IProduct[] = [];
 
-        products.forEach(product => {
+        order.forEach(product => {
             const lowerLabel = product.label.toLowerCase();
             const lowerQuery = filters.searchQuery.toLowerCase();
             if (!lowerLabel.includes(lowerQuery)) {
@@ -43,7 +45,7 @@ export const ProductsPage: React.FunctionComponent = () => {
             }
         });
         return [checked, uncheked];
-    }, [products, filters.searchQuery]);
+    }, [order, filters.searchQuery]);
 
     return (
         <Box

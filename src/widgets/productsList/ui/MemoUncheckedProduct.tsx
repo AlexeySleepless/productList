@@ -1,40 +1,34 @@
-import { Product, ProductLabel, type IProduct } from '@entities/product';
-import { DeleteProduct } from '@features/deleteProduct';
-import { ToggleProduct } from '@features/toggleProduct';
+import { ProductLabel } from '@entities/product';
 import { UpdateWrapper } from '@features/updateProduct';
 import React from 'react';
+import { BaseInteractionProduct } from './BaseInteractionProduct';
+import { useSelectFromProducts } from '../model/useSelectFromProducts';
 
 interface IMemoUncheckedProductProps {
-    product: IProduct;
+    id: number;
     triggerError?: (arg: string) => void;
     triggerConfirm?: (arg1: () => Promise<void>, arg2: string) => void;
 }
 
 export const MemoUncheckedProduct: React.FunctionComponent<IMemoUncheckedProductProps> =
-    React.memo(({ product, triggerConfirm, triggerError }) => {
+    React.memo(({ id, triggerConfirm, triggerError }) => {
+        const { product } = useSelectFromProducts(id);
+        if (!product) {
+            return null;
+        }
         const updateAction = (
             <UpdateWrapper product={product} onError={triggerError}>
                 <ProductLabel product={product} />
             </UpdateWrapper>
         );
-        const deleteAction = (
-            <DeleteProduct
-                triggerConfirm={triggerConfirm}
-                triggerError={triggerError}
-                product={product}
-            />
-        );
 
-        const toggleAction = (
-            <ToggleProduct triggerError={triggerError} product={product} />
-        );
         return (
-            <Product
+            <BaseInteractionProduct
                 {...{
                     product,
                     updateAction,
-                    deleteAction,
-                    toggleAction,
+                    triggerConfirm,
+                    triggerError,
                 }}
             />
         );

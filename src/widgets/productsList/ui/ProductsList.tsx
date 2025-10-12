@@ -42,7 +42,7 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                             {reverseMap(unchecked, product => (
                                 <MemoUncheckedProduct
                                     key={product.id}
-                                    product={product}
+                                    id={product.id}
                                     triggerConfirm={triggerConfirm}
                                     triggerError={triggerError}
                                 />
@@ -61,7 +61,7 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                             {checked.map(product => (
                                 <MemoCheckedProduct
                                     key={product.id}
-                                    product={product}
+                                    id={product.id}
                                     triggerConfirm={triggerConfirm}
                                     triggerError={triggerError}
                                 />
