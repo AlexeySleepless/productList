@@ -3,15 +3,12 @@ import { UpdateWrapper } from '@features/updateProduct';
 import React from 'react';
 import { BaseInteractionProduct } from './BaseInteractionProduct';
 import { useSelectFromProducts } from '../model/useSelectFromProducts';
+import type { IProductElementProps } from '../model/types';
+import { useTriggerContext } from '../lib/triggerContext';
 
-interface IMemoUncheckedProductProps {
-    id: number;
-    triggerError?: (arg: string) => void;
-    triggerConfirm?: (arg1: () => Promise<void>, arg2: string) => void;
-}
-
-export const MemoUncheckedProduct: React.FunctionComponent<IMemoUncheckedProductProps> =
-    React.memo(({ id, triggerConfirm, triggerError }) => {
+export const MemoUncheckedProduct: React.FunctionComponent<IProductElementProps> =
+    React.memo(({ id }) => {
+        const { triggerError } = useTriggerContext();
         const { product } = useSelectFromProducts(id);
         if (!product) {
             return null;
@@ -27,8 +24,6 @@ export const MemoUncheckedProduct: React.FunctionComponent<IMemoUncheckedProduct
                 {...{
                     product,
                     updateAction,
-                    triggerConfirm,
-                    triggerError,
                 }}
             />
         );

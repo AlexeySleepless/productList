@@ -6,7 +6,11 @@ import { productsApi, type IProduct } from '@entities/product';
 import { useLastError, useManageModal } from '@shared/lib/uiUtils';
 import { ErrorAlert } from '@shared/ui/errorAlert';
 import { ConfirmModal } from '@shared/ui/confirmModal';
-import { ProductsList } from '@widgets/productsList';
+import {
+    ProductsList,
+    TriggerContext,
+    type ITriggerContext,
+} from '@widgets/productsList';
 
 export const ProductsPage: React.FunctionComponent = () => {
     const [filters, setFilters] = useState<IFilters>({
@@ -27,6 +31,14 @@ export const ProductsPage: React.FunctionComponent = () => {
 
     const memoTriggerConfirm = useCallback(triggerConfirm, []);
     const memoTriggerError = useCallback(triggerError, []);
+
+    const triggerContextData = useMemo<ITriggerContext>(
+        () => ({
+            triggerConfirm: memoTriggerConfirm,
+            triggerError: memoTriggerError,
+        }),
+        [],
+    );
 
     const [checked, unchecked] = useMemo<[IProduct[], IProduct[]]>(() => {
         const checked: IProduct[] = [];
@@ -72,14 +84,14 @@ export const ProductsPage: React.FunctionComponent = () => {
                 message={message}
             />
             <ProductsFilters {...{ filters, setFilters }} />
-            <ProductsList
-                {...{
-                    checked,
-                    unchecked,
-                    triggerConfirm: memoTriggerConfirm,
-                    triggerError: memoTriggerError,
-                }}
-            />
+            <TriggerContext.Provider value={triggerContextData}>
+                <ProductsList
+                    {...{
+                        checked,
+                        unchecked,
+                    }}
+                />
+            </TriggerContext.Provider>
         </Box>
     );
 };
