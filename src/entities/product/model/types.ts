@@ -2,6 +2,8 @@ export interface IProduct {
     id: number;
     label: string;
     isChecked: boolean;
+    important: boolean;
+    type: string;
 }
 
 export interface IProductProps {
@@ -9,4 +11,5 @@ export interface IProductProps {
     updateAction?: React.ReactNode;
     deleteAction?: React.ReactNode;
     toggleAction?: React.ReactNode;
+    infoUI?: React.ReactNode;
 }

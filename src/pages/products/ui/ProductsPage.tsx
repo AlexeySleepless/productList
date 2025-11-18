@@ -56,6 +56,7 @@ export const ProductsPage: React.FunctionComponent = () => {
                 uncheked.push(product);
             }
         });
+
         return [checked, uncheked];
     }, [order, filters.searchQuery]);
 

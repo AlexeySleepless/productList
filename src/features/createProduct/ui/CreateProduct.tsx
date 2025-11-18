@@ -30,7 +30,13 @@ export const CreateProduct: React.FunctionComponent<IСreateProductProps> = ({
     const inputRef = useRef<HTMLInputElement | null>(null);
     const createProduct = () => {
         const id = Date.now();
-        createFn({ id, label: value, isChecked: false })
+        createFn({
+            id,
+            label: value,
+            isChecked: false,
+            type: '',
+            important: false,
+        })
             .unwrap()
             .catch(() => {
                 triggerError?.('Не удалось создать продукт');

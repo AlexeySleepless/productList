@@ -1,10 +1,34 @@
 import type { IProduct } from '../model/types';
 
 const products: IProduct[] = [
-    { id: 1, label: 'Молоко', isChecked: false },
-    { id: 2, label: 'Сахар', isChecked: false },
-    { id: 3, label: 'Бананы', isChecked: false },
-    { id: 4, label: 'Йогурт', isChecked: false },
+    {
+        id: 1,
+        label: 'Молоко',
+        isChecked: false,
+        important: false,
+        type: 'кисломолочка',
+    },
+    {
+        id: 2,
+        label: 'Сахар',
+        isChecked: false,
+        important: false,
+        type: 'бакалея',
+    },
+    {
+        id: 3,
+        label: 'Бананы',
+        isChecked: false,
+        important: false,
+        type: 'фрукты',
+    },
+    {
+        id: 4,
+        label: 'Йогурт',
+        isChecked: false,
+        important: false,
+        type: 'кисломолочка',
+    },
     // { id: 5, label: 'Пуддинг', isChecked: false },
     // { id: 6, label: 'Яблоко', isChecked: false },
     // { id: 7, label: 'Хлеб', isChecked: false },
@@ -22,6 +46,26 @@ const products: IProduct[] = [
     // { id: 19, label: 'Сахар', isChecked: false },
     // { id: 20, label: 'Томат', isChecked: false },
 ];
+
+export async function getProductTypes(): Promise<string[]> {
+    await new Promise<void>(res => {
+        setTimeout(() => {
+            res();
+        }, 1000);
+    });
+    const alreadyExistedTypes: Record<string, boolean> = {};
+    const types: string[] = [];
+    let type: string = '';
+    for (const product of products) {
+        type = product.type;
+        if (type in alreadyExistedTypes || !type) {
+            continue;
+        }
+        alreadyExistedTypes[type] = true;
+        types.push(type);
+    }
+    return types;
+}
 
 export async function getProducts(): Promise<IProduct[]> {
     await new Promise<void>(res => {
