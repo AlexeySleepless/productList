@@ -1,42 +1,27 @@
-import { productsApi } from '@entities/product';
-import Add from '@mui/icons-material/Add';
-import {
-    Button,
-    Drawer,
-    ListItemIcon,
-    ListItemText,
-    TextField,
-} from '@mui/material';
-import { StyledListItem } from '@shared/ui/styledListItem';
+import { productsApi, ProductTypeAutocomplete } from '@entities/product';
+import { Button, Drawer, TextField } from '@mui/material';
 import type React from 'react';
 import { useRef, useState } from 'react';
+import type { TNewProduct } from '../model/types';
+import { createInitData } from '../lib/createInitData';
+import { createNewProduct } from '../lib/createNewProduct';
+import { CreateProductInList } from './CreateProductInList';
 
 interface IСreateProductProps {
     triggerError?: (arg: string) => void;
-    triggerCreateUI?: (
-        ui: React.ReactNode,
-        fn: () => void,
-        message: string,
-    ) => void;
 }
 
 export const CreateProduct: React.FunctionComponent<IСreateProductProps> = ({
     triggerError,
 }) => {
     const label = 'Добавить продукт';
-    const [value, setValue] = useState<string>('');
+    const [data, setData] = useState<TNewProduct>(createInitData);
     const [open, setOpen] = useState<boolean>(false);
     const [createFn] = productsApi.useCreateProductMutation();
     const inputRef = useRef<HTMLInputElement | null>(null);
     const createProduct = () => {
-        const id = Date.now();
-        createFn({
-            id,
-            label: value,
-            isChecked: false,
-            type: '',
-            important: false,
-        })
+        const newProduct = createNewProduct(data);
+        createFn(newProduct)
             .unwrap()
             .catch(() => {
                 triggerError?.('Не удалось создать продукт');
@@ -45,7 +30,7 @@ export const CreateProduct: React.FunctionComponent<IСreateProductProps> = ({
 
     const addProduct = () => {
         createProduct();
-        setValue('');
+        setData(createInitData());
         setOpen(false);
     };
 
@@ -58,37 +43,7 @@ export const CreateProduct: React.FunctionComponent<IСreateProductProps> = ({
     };
     return (
         <>
-            <StyledListItem
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                }}
-                onClick={showDrawer}
-            >
-                <ListItemIcon
-                    sx={{
-                        minWidth: 50,
-                        minHeight: 50,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        color: 'black',
-                    }}
-                >
-                    <Add />
-                </ListItemIcon>
-                <ListItemText
-                    primary={label}
-                    slotProps={{
-                        primary: {
-                            sx: {
-                                fontSize: '1rem',
-                                userSelect: 'none',
-                            },
-                        },
-                    }}
-                />
-            </StyledListItem>
+            <CreateProductInList onClick={showDrawer} label={label} />
             <Drawer
                 open={open}
                 anchor="bottom"
@@ -105,26 +60,40 @@ export const CreateProduct: React.FunctionComponent<IСreateProductProps> = ({
                 }}
             >
                 <TextField
-                    value={value}
+                    defaultValue={data.label}
                     inputRef={inputRef}
                     label="Название продукта"
                     variant="outlined"
-                    onChange={e => {
-                        setValue(e.target.value);
+                    //с управляемым компонентом не задалось
+                    onBlur={() => {
+                        setData(data => ({
+                            ...data,
+                            label: inputRef.current?.value ?? '',
+                        }));
                     }}
-                    onKeyDown={event => {
-                        if (event.key === 'Enter') {
-                            addProduct();
-                        }
+                    //Вопросы к потребителю
+                    // onKeyDown={event => {
+                    //     if (event.key === 'Enter') {
+                    //         addProduct();
+                    //     }
+                    // }}
+                />
+                <ProductTypeAutocomplete
+                    productType={data.type}
+                    applyNewType={(type: string) => {
+                        setData(data => ({
+                            ...data,
+                            type,
+                        }));
                     }}
-                ></TextField>
+                />
                 <Button
                     variant="outlined"
                     onClick={() => {
                         addProduct();
                     }}
                 >
-                    Добавить продукт
+                    {label}
                 </Button>
             </Drawer>
         </>
