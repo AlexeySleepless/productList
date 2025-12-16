@@ -1,6 +1,8 @@
-import { productsApi } from '@entities/product';
 import { Autocomplete, TextField } from '@mui/material';
 import { useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectUniqueProductTypes } from '../api/selectors';
+import { shallowEqual } from 'react-redux';
 
 interface IProductTypeAutocompleteProps {
     productType?: string;
@@ -16,8 +18,10 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
     const initType = productType ?? '';
     const [localType, setLocalType] = useState<string>(initType);
 
-    const { data: productTypes = [] } =
-        productsApi.useFetchAllProductTypesQuery('');
+    const productTypes: string[] = useSelector(
+        selectUniqueProductTypes,
+        shallowEqual,
+    );
 
     // инициализация завершения режима ввода типа в случае набора текста
     const initEndOfEdit = () => {

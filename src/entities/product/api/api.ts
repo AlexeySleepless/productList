@@ -5,13 +5,11 @@ import {
     createProduct,
     deleteProduct,
     getProducts,
-    getProductTypes,
     updateProduct,
 } from './storageInteraction';
 import { handleOptimisticUpdate } from './utils';
 
 const productsTag = 'products';
-const productTypesTag = 'types';
 const tagTypes = [productsTag];
 
 export const productsApi = createApi({
@@ -38,19 +36,6 @@ export const productsApi = createApi({
                 }
             },
             providesTags: () => [productsTag],
-        }),
-
-        // запрос всех типов продуктов
-        fetchAllProductTypes: build.query<string[], unknown>({
-            queryFn: async () => {
-                try {
-                    const data = await getProductTypes();
-                    return { data };
-                } catch (error) {
-                    return { error };
-                }
-            },
-            providesTags: () => [productTypesTag],
         }),
 
         // обновление продукта
@@ -94,7 +79,6 @@ export const productsApi = createApi({
                     action,
                 });
             },
-            invalidatesTags: [productTypesTag],
         }),
 
         // удаление продукта
@@ -131,7 +115,6 @@ export const productsApi = createApi({
                     action,
                 });
             },
-            invalidatesTags: [productTypesTag],
         }),
 
         // создание продукта
@@ -166,7 +149,6 @@ export const productsApi = createApi({
                     action,
                 });
             },
-            invalidatesTags: [productTypesTag],
         }),
     }),
 });

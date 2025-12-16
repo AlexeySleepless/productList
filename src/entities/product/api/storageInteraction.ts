@@ -47,26 +47,6 @@ const products: IProduct[] = [
     // { id: 20, label: 'Томат', isChecked: false },
 ];
 
-export async function getProductTypes(): Promise<string[]> {
-    await new Promise<void>(res => {
-        setTimeout(() => {
-            res();
-        }, 1000);
-    });
-    const alreadyExistedTypes: Record<string, boolean> = {};
-    const types: string[] = [];
-    let type: string = '';
-    for (const product of products) {
-        type = product.type;
-        if (type in alreadyExistedTypes || !type) {
-            continue;
-        }
-        alreadyExistedTypes[type] = true;
-        types.push(type);
-    }
-    return types;
-}
-
 export async function getProducts(): Promise<IProduct[]> {
     await new Promise<void>(res => {
         setTimeout(() => {
