@@ -1,0 +1,20 @@
+.listItem{
+    display: flex;
+    position: relative;
+    align-items: center;
+    padding: 5px;
+    min-height: 60px;
+}
+
+.listItem:hover{
+    background-color: rgba(25,118,210, 0.15);
+}
+
+@media (pointer: coarse){
+    .listItem:hover{
+        background-color: transparent;
+    }
+    .listItem:focus-visible{
+        background-color: transparent;
+    }
+}

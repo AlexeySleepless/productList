@@ -75,10 +75,7 @@ export const UpdateWrapper: React.FunctionComponent<IUPdateWrapper> = ({
     const editControl = (
         <div className={classes.editWrapper}>
             <TextField
-                sx={{
-                    flexGrow: 1,
-                    justifyContent: 'center',
-                }}
+                className={classes.textfield}
                 inputRef={inputRef}
                 value={localLabel}
                 multiline

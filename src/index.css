@@ -24,3 +24,12 @@ body {
     line-height: 1.5;
     min-height: 100%;
 }
+
+button, label{
+    -webkit-tap-highlight-color: transparent;
+}
+
+ol, ul{
+    margin: 0;
+    padding: 0;
+}

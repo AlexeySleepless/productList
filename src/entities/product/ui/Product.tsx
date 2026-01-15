@@ -1,10 +1,10 @@
 import type { IProductProps } from '../model/types';
 import React, { useState, type JSX } from 'react';
 import { ProductLabel } from './productLabel/ProductLabel';
-import { StyledListItem } from '@shared/ui/styledListItem';
-import { Collapse, IconButton } from '@mui/material';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import ExpandLess from '@mui/icons-material/ExpandLess';
+import { classes } from '@shared/ui/styledListItem';
+import { Collapse } from '@mui/material';
+import { Button } from '@shared/ui/button';
+import { SvgIcon } from '@shared/ui/svgIcon';
 
 export const Product: React.FunctionComponent<IProductProps> = ({
     product,
@@ -28,17 +28,28 @@ export const Product: React.FunctionComponent<IProductProps> = ({
     let info: JSX.Element | null = null;
 
     if (infoUI) {
+        const buttonData = expanded
+            ? {
+                  label: 'Открыть описание',
+                  path: (
+                      <path d="m12 8-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"></path>
+                  ),
+              }
+            : {
+                  label: 'Закрыть описание',
+                  path: (
+                      <path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+                  ),
+              };
         showInfoButton = (
-            <IconButton
-                onClick={handleExpandClick}
-                aria-label={expanded ? 'Открыть описание' : 'Закрыть описание'}
-                sx={{
-                    minWidth: 50,
-                    minHeight: 50,
-                }}
-            >
-                {expanded ? <ExpandLess /> : <ExpandMore />}
-            </IconButton>
+            <>
+                <Button
+                    onClick={handleExpandClick}
+                    aria-label={buttonData.label}
+                >
+                    <SvgIcon>{buttonData.path}</SvgIcon>
+                </Button>
+            </>
         );
 
         info = (
@@ -49,14 +60,14 @@ export const Product: React.FunctionComponent<IProductProps> = ({
     }
     console.log('rerender', product.label);
     return (
-        <>
-            <StyledListItem>
+        <li>
+            <div className={classes.listItem}>
                 {toggleAction}
                 {readyTexField}
                 {showInfoButton}
                 {deleteAction}
-            </StyledListItem>
+            </div>
             {info}
-        </>
+        </li>
     );
 };

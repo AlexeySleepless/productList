@@ -3,3 +3,20 @@
     flex-grow: 1;
     align-items: center;
 }
+
+.productLabel{
+    margin-top: 4px;
+    margin-bottom: 4px;
+
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: 0.001em;
+    user-select: none;
+}
+
+.checkedLabel{
+    color: gray;
+    text-decoration: line-through;
+}

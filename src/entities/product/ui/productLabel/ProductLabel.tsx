@@ -1,4 +1,3 @@
-import { ListItemText } from '@mui/material';
 import type { IProduct } from '../../model/types';
 import classes from './ProductLabel.module.css';
 
@@ -10,21 +9,12 @@ export const ProductLabel: React.FunctionComponent<IProductLabelProps> = ({
     product,
 }) => {
     const { label, isChecked } = product;
+    const classNames = isChecked
+        ? `${classes.productLabel} ${classes.checkedLabel}`
+        : classes.productLabel;
     return (
         <div className={classes.productLabelWrap}>
-            <ListItemText
-                primary={label}
-                slotProps={{
-                    primary: {
-                        sx: {
-                            fontSize: '1rem',
-                            color: isChecked ? 'gray' : 'inherit',
-                            userSelect: 'none',
-                            textDecoration: isChecked ? 'line-through' : 'none',
-                        },
-                    },
-                }}
-            />
+            <div className={classNames}>{label}</div>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import { type IProduct } from '@entities/product';
 import { CreateProduct } from '@features/createProduct';
-import { Divider, Paper, Stack, Typography } from '@mui/material';
+import { Divider, Paper, Typography } from '@mui/material';
 import React from 'react';
 import { MemoCheckedProduct } from './MemoCheckedProduct';
 import { MemoUncheckedProduct } from './MemoUncheckedProduct';
@@ -24,8 +24,8 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                     borderRadius: 3,
                 }}
             >
-                <Stack sx={{ padding: 0 }}>
-                    <CreateProduct triggerError={triggerError} />
+                <CreateProduct triggerError={triggerError} />
+                <ul>
                     {checked.length || unchecked.length ? (
                         <>
                             {reverseMap(unchecked, product => (
@@ -61,7 +61,7 @@ export const ProductsList: React.FunctionComponent<IProductsListProps> =
                             Ничего не найдено
                         </Typography>
                     )}
-                </Stack>
+                </ul>
             </Paper>
         );
     });

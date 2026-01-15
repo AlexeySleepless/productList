@@ -1,5 +1,5 @@
 import { productsApi, type IProduct } from '@entities/product';
-import { Checkbox, checkboxClasses, ListItemIcon } from '@mui/material';
+import { CheckBox } from '@shared/ui/checkBox';
 
 interface IToggleProductProps {
     product: IProduct;
@@ -12,9 +12,7 @@ export const ToggleProduct: React.FunctionComponent<IToggleProductProps> = ({
 }) => {
     const { isChecked } = product;
     const [updateFn] = productsApi.useUpdateProductMutation();
-    const checkBoxHandler = (
-        event: React.MouseEvent<HTMLElement, MouseEvent>,
-    ) => {
+    const checkBoxHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.stopPropagation();
         updateFn({ ...product, isChecked: !isChecked })
             .unwrap()
@@ -24,28 +22,10 @@ export const ToggleProduct: React.FunctionComponent<IToggleProductProps> = ({
                 );
             });
     };
+
     return (
-        <ListItemIcon
-            sx={{
-                minWidth: 50,
-                minHeight: 50,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}
-        >
-            <Checkbox
-                checked={isChecked}
-                onClick={checkBoxHandler}
-                disableRipple
-                sx={{
-                    transition: 'color 0.3s ease',
-                    color: isChecked ? 'gray' : 'black',
-                    [`&.${checkboxClasses.checked}`]: {
-                        color: 'gray',
-                    },
-                }}
-            />
-        </ListItemIcon>
+        <>
+            <CheckBox checked={isChecked} onChange={checkBoxHandler} />
+        </>
     );
 };

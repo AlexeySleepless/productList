@@ -1,22 +1,20 @@
-import { ListItemIcon, ListItemText, type ListItemProps } from '@mui/material';
-import { StyledListItem } from '@shared/ui/styledListItem';
+import { ListItemIcon, ListItemText } from '@mui/material';
+import { classes as externalClasses } from '@shared/ui/styledListItem';
 import Add from '@mui/icons-material/Add';
+import classes from './CreateProduct.module.css';
 
-interface ICreateProductInList extends ListItemProps {
+interface ICreateProductInList
+    extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     label?: string;
 }
 
 export const CreateProductInList: React.FunctionComponent<
     ICreateProductInList
-> = ({ label, sx, ...restProps }) => {
+> = ({ label, ...restProps }) => {
     return (
-        <StyledListItem
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                ...sx,
-            }}
+        <button
             {...restProps}
+            className={`${externalClasses.listItem} ${classes.button}`}
         >
             <ListItemIcon
                 sx={{
@@ -37,10 +35,11 @@ export const CreateProductInList: React.FunctionComponent<
                         sx: {
                             fontSize: '1rem',
                             userSelect: 'none',
+                            textAlign: 'start',
                         },
                     },
                 }}
             />
-        </StyledListItem>
+        </button>
     );
 };

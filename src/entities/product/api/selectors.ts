@@ -8,12 +8,13 @@ export const selectUniqueProductTypes = createSelector(
     selectProductsResult,
     result => {
         const data = result.data;
-        console.log('selector', result);
         if (!data) {
             return [];
         }
         const products = data.order;
-        const uniqTypesSet = new Set(products.map(product => product.type));
+        const uniqTypesSet = new Set(
+            products.map(product => product.type).filter(a => a),
+        );
         return [...uniqTypesSet].sort();
     },
 );
