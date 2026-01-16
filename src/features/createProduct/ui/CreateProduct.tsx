@@ -34,7 +34,9 @@ export const CreateProduct: React.FunctionComponent<IСreateProductProps> = ({
         setOpen(false);
     };
 
-    const showDrawer = (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+    const showDrawer = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
         event.preventDefault();
         setOpen(true);
         setTimeout(() => {
@@ -71,12 +73,6 @@ export const CreateProduct: React.FunctionComponent<IСreateProductProps> = ({
                             label: inputRef.current?.value ?? '',
                         }));
                     }}
-                    //Вопросы к потребителю
-                    // onKeyDown={event => {
-                    //     if (event.key === 'Enter') {
-                    //         addProduct();
-                    //     }
-                    // }}
                 />
                 <ProductTypeAutocomplete
                     productType={data.type}
