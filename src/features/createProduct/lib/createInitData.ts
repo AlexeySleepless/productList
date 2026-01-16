@@ -5,5 +5,6 @@ export const createInitData = (): TNewProduct => {
         label: '',
         important: false,
         type: '',
+        favorite: false,
     };
 };

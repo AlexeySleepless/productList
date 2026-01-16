@@ -1,3 +1,3 @@
 import type { IProduct } from '@entities/product';
 
-export type TNewProduct = Pick<IProduct, 'label' | 'important' | 'type'>;
+export type TNewProduct = Omit<IProduct, 'id' | 'isChecked'>;

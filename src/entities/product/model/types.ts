@@ -4,6 +4,7 @@ export interface IProduct {
     isChecked: boolean;
     important: boolean;
     type: string;
+    favorite: boolean;
 }
 
 export interface IProductProps {

@@ -3,6 +3,10 @@
     flex-grow: 1;
 }
 
+.saveNestedDiv{
+    min-width: 0;
+}
+
 .editWrapper{
     justify-content: center;
     align-items: center;
