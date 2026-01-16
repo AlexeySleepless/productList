@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
-export const useLastError = () => {
+export const useLastError = (initDelay?: number) => {
+    const delay = initDelay ?? 5000;
     const [openError, setOpenError] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [timerId, setTimerId] = useState<number>(0);
+    const timerIdRef = useRef<number>(0);
     const closeError = () => {
         setOpenError(false);
         setErrorMessage('');
@@ -11,11 +12,11 @@ export const useLastError = () => {
     const handleError = (message: string): void => {
         setErrorMessage(message);
         setOpenError(true);
+        const timerId = timerIdRef.current;
         if (timerId) {
             clearTimeout(timerId);
         }
-        const id = setTimeout(closeError, 5000);
-        setTimerId(id);
+        timerIdRef.current = setTimeout(closeError, delay);
     };
     return {
         openFlag: openError,

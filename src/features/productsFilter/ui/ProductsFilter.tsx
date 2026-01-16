@@ -7,7 +7,8 @@ import {
 } from '@mui/material';
 import { Close, Search } from '@mui/icons-material';
 import type { IFilters } from '../model/types';
-import type { ChangeEvent } from 'react';
+import { useState, type ChangeEvent } from 'react';
+import { useDebounce } from '@shared/lib/restUtils';
 
 interface IProductsFilters {
     filters: IFilters;
@@ -19,12 +20,19 @@ export const ProductsFilters: React.FunctionComponent<IProductsFilters> = ({
     setFilters,
 }) => {
     const { searchQuery } = filters;
+    const [uiQuery, setUiQuery] = useState<string>(searchQuery);
+    const debounceSetFilters = useDebounce(setFilters, 50);
+
+    const setNewQuery = (searchQuery: string): void => {
+        setUiQuery(searchQuery);
+        debounceSetFilters({ ...filters, searchQuery });
+    };
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const searchQuery = event.target.value;
-        setFilters({ ...filters, searchQuery });
+        setNewQuery(searchQuery);
     };
     const clearSearch = () => {
-        setFilters({ ...filters, searchQuery: '' });
+        setNewQuery('');
     };
 
     const theme = useTheme();
@@ -41,7 +49,7 @@ export const ProductsFilters: React.FunctionComponent<IProductsFilters> = ({
                 label="Поиск"
                 variant="outlined"
                 fullWidth
-                value={searchQuery}
+                value={uiQuery}
                 onChange={handleChange}
                 slotProps={{
                     input: {
