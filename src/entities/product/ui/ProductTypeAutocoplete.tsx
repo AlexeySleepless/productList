@@ -62,7 +62,7 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
                 }}
                 onClick={() => {
                     setOpen(true);
-                    //для того, чтобы фокус не вернулся при закрытии окна
+                    //для того, чтобы фокус не вернулся при закрытии окна (залипший риппл)
                     buttonRef.current?.blur();
                 }}
             >
@@ -94,6 +94,7 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
                             label="Тип продукта"
                             inputRef={inputRef}
                             variant="outlined"
+                            autoFocus
                             onKeyDown={event => {
                                 if (event.key === 'Enter') {
                                     initEndOfEdit();

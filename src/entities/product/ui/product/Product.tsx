@@ -1,10 +1,12 @@
-import type { IProductProps } from '../model/types';
+import type { IProductProps } from '../../model/types';
 import React, { useState, type JSX } from 'react';
-import { ProductLabel } from './productLabel/ProductLabel';
-import { classes } from '@shared/ui/styledListItem';
+import { ProductLabel } from '../productLabel/ProductLabel';
+import { classes as externalClasses } from '@shared/ui/styledListItem';
 import { Collapse } from '@mui/material';
 import { Button } from '@shared/ui/button';
 import { SvgIcon } from '@shared/ui/svgIcon';
+import classes from './Product.module.css';
+import { ProductMarks } from '../productMarks/ProductMarks';
 
 export const Product: React.FunctionComponent<IProductProps> = ({
     product,
@@ -60,8 +62,9 @@ export const Product: React.FunctionComponent<IProductProps> = ({
     }
     console.log('rerender', product.label);
     return (
-        <li>
-            <div className={classes.listItem}>
+        <li className={classes.li}>
+            {product.isChecked || <ProductMarks product={product} />}
+            <div className={externalClasses.listItem}>
                 {toggleAction}
                 {readyTexField}
                 {showInfoButton}

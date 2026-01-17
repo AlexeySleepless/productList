@@ -1,0 +1,40 @@
+.params{
+    --size: 15px;
+    --line-size: 7px;
+    --important-color: #ffcf48;
+    --favorite-color: #ff6b6b;
+}
+
+.importantParams{
+    --markColor: var(--important-color)
+}
+
+.favoriteParams{
+    --markColor: var(--favorite-color)
+}
+
+.mark{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--size);
+    height: var(--size); 
+    border-right: var(--size) solid transparent;
+    border-top: var(--size) solid var(--markColor);
+}
+
+.markLine, .shiftMarkLine{
+    position: absolute;
+    top: 0;
+    width: 20%;
+    height: var(--line-size);
+    background-color: var(--markColor);
+    transform: skew(-45deg);
+}
+
+.markLine{
+    left: 0;
+}
+.shiftMarkLine{
+    left: 20%;
+}
