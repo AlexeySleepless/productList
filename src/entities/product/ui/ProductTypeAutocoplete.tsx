@@ -1,10 +1,16 @@
-import { Autocomplete, TextField } from '@mui/material';
+import {
+    Autocomplete,
+    Button,
+    Drawer,
+    TextField,
+    type ButtonBaseProps,
+} from '@mui/material';
 import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUniqueProductTypes } from '../api/selectors';
 import { shallowEqual } from 'react-redux';
 
-interface IProductTypeAutocompleteProps {
+interface IProductTypeAutocompleteProps extends ButtonBaseProps {
     productType?: string;
     applyNewType?: (arg: string) => void;
 }
@@ -12,6 +18,8 @@ interface IProductTypeAutocompleteProps {
 export const ProductTypeAutocomplete: React.FunctionComponent<
     IProductTypeAutocompleteProps
 > = ({ productType, applyNewType }) => {
+    const [open, setOpen] = useState<boolean>(false);
+
     //этот стейт нужен только для того, чтобы autocomplete не ругался,
     //и для того, чтобы обновлять отображаемое значение
     //в коллбек отправляется значение текстового поля, полученного с помощью useRef
@@ -22,6 +30,8 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
         selectUniqueProductTypes,
         shallowEqual,
     );
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const buttonRef = useRef<HTMLButtonElement | null>(null);
 
     // инициализация завершения режима ввода типа в случае набора текста
     const initEndOfEdit = () => {
@@ -31,7 +41,7 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
 
         const type = inputRef.current.value;
 
-        if (type == initType || !type) {
+        if (type == initType || +type == 0) {
             setLocalType(initType);
             return;
         }
@@ -40,30 +50,63 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
         applyNewType?.(type);
     };
 
-    const inputRef = useRef<HTMLInputElement | null>(null);
-
     return (
         <>
-            <Autocomplete
-                freeSolo
-                value={localType}
-                options={productTypes}
-                onBlur={initEndOfEdit}
-                renderInput={params => (
-                    <TextField
-                        {...params}
-                        label="Тип продукта"
-                        inputRef={inputRef}
-                        variant="outlined"
-                        onKeyDown={event => {
-                            if (event.key === 'Enter') {
-                                initEndOfEdit();
-                                inputRef.current?.blur();
-                            }
-                        }}
-                    />
-                )}
-            />
+            <Button
+                variant="text"
+                ref={buttonRef}
+                color="primary"
+                sx={{
+                    justifyContent: 'start',
+                    color: localType ? null : 'rgba(0, 0, 0, 0.6)',
+                }}
+                onClick={() => {
+                    setOpen(true);
+                    //для того, чтобы фокус не вернулся при закрытии окна
+                    buttonRef.current?.blur();
+                }}
+            >
+                {localType || 'Тип не установлен'}
+            </Button>
+            <Drawer
+                open={open}
+                anchor="top"
+                onClose={() => {
+                    setOpen(false);
+                }}
+                sx={{
+                    '& .MuiDrawer-paper': {
+                        p: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 2,
+                    },
+                }}
+            >
+                <Autocomplete
+                    freeSolo
+                    value={localType}
+                    options={productTypes}
+                    onBlur={initEndOfEdit}
+                    renderInput={params => (
+                        <TextField
+                            {...params}
+                            label="Тип продукта"
+                            inputRef={inputRef}
+                            variant="outlined"
+                            onKeyDown={event => {
+                                if (event.key === 'Enter') {
+                                    initEndOfEdit();
+                                    inputRef.current?.blur();
+                                    Promise.resolve().then(() => {
+                                        setOpen(false);
+                                    });
+                                }
+                            }}
+                        />
+                    )}
+                />
+            </Drawer>
         </>
     );
 };

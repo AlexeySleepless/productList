@@ -50,6 +50,8 @@ export const CreateProduct: React.FunctionComponent<IСreateProductProps> = ({
                 open={open}
                 anchor="bottom"
                 onClose={() => {
+                    //сбрасываем введенные данные
+                    setData(createInitData());
                     setOpen(false);
                 }}
                 sx={{
