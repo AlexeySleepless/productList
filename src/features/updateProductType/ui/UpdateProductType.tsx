@@ -1,6 +1,6 @@
 import {
-    productsApi,
     ProductTypeAutocomplete,
+    useProductMutation,
     type IProduct,
 } from '@entities/product';
 
@@ -12,16 +12,13 @@ interface IUpdateProductTypeProps {
 export const UpdateProductType: React.FunctionComponent<
     IUpdateProductTypeProps
 > = ({ product, triggerError }) => {
-    const [updateFn] = productsApi.useUpdateProductMutation();
-    const applyNewType = (type: string) => {
-        updateFn({ ...product, type })
-            .unwrap()
-            .catch(() => {
-                triggerError?.(
-                    `Произошла ошибка при редактировании типа продукта - ${product.label}`,
-                );
-            });
-    };
+    const errorMessage = `Произошла ошибка при редактировании типа продукта - ${product.label}`;
+    const applyNewType = useProductMutation(
+        product,
+        'type',
+        triggerError,
+        errorMessage,
+    );
 
     return (
         <ProductTypeAutocomplete

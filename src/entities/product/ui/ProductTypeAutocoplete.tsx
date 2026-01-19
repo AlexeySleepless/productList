@@ -59,6 +59,9 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
                 sx={{
                     justifyContent: 'start',
                     color: localType ? null : 'rgba(0, 0, 0, 0.6)',
+                    fontWeight: 400,
+                    fontSize: '1rem',
+                    lineHeight: 1.5,
                 }}
                 onClick={() => {
                     setOpen(true);

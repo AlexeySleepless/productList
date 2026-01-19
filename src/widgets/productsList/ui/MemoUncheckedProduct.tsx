@@ -7,6 +7,8 @@ import type { IProductElementProps } from '../model/types';
 import { useTriggerContext } from '../lib/triggerContext';
 import { UpdateProductType } from '@features/updateProductType';
 import { Box } from '@mui/material';
+import { UpdateProductImportant } from '@features/updateProductImportant';
+import { UpdateProductFavorite } from '@features/updateProductFavorite';
 
 export const MemoUncheckedProduct: React.FunctionComponent<IProductElementProps> =
     React.memo(({ id }) => {
@@ -24,9 +26,19 @@ export const MemoUncheckedProduct: React.FunctionComponent<IProductElementProps>
         const infoUI = (
             <Box
                 sx={{
-                    padding: '10px 5px',
+                    padding: '5px 5px 15px',
+                    display: 'flex',
+                    gap: '10px',
                 }}
             >
+                <UpdateProductImportant
+                    triggerError={triggerError}
+                    product={product}
+                />
+                <UpdateProductFavorite
+                    triggerError={triggerError}
+                    product={product}
+                />
                 <UpdateProductType
                     triggerError={triggerError}
                     product={product}

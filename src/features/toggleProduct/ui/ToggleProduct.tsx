@@ -1,4 +1,4 @@
-import { productsApi, type IProduct } from '@entities/product';
+import { useProductMutation, type IProduct } from '@entities/product';
 import { CheckBox } from '@shared/ui/checkBox';
 
 interface IToggleProductProps {
@@ -11,16 +11,16 @@ export const ToggleProduct: React.FunctionComponent<IToggleProductProps> = ({
     triggerError,
 }) => {
     const { isChecked } = product;
-    const [updateFn] = productsApi.useUpdateProductMutation();
+    const errorMessage = `Произошла ошибка при смене статуса продукта- ${product.label}`;
+    const applyNewFlag = useProductMutation(
+        product,
+        'isChecked',
+        triggerError,
+        errorMessage,
+    );
     const checkBoxHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         event.stopPropagation();
-        updateFn({ ...product, isChecked: !isChecked })
-            .unwrap()
-            .catch(() => {
-                triggerError?.(
-                    `Произошла ошибка при смене статуса продукта - ${product.label}`,
-                );
-            });
+        applyNewFlag(!isChecked);
     };
 
     return (
