@@ -29,6 +29,7 @@ export const MemoUncheckedProduct: React.FunctionComponent<IProductElementProps>
                     padding: '5px 5px 15px',
                     display: 'flex',
                     gap: '10px',
+                    flexWrap: 'wrap',
                 }}
             >
                 <UpdateProductImportant
