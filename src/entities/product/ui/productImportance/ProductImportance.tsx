@@ -12,7 +12,7 @@ export const ProductImportance: React.FunctionComponent<
     return (
         <CheckBox
             checked={productImprotance}
-            onClick={e => {
+            onChange={e => {
                 e.stopPropagation();
                 applyNewImportance?.(!productImprotance);
             }}

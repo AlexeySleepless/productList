@@ -12,11 +12,10 @@
     position: relative;
     background-color: transparent;
     cursor: pointer;
-    padding: 9px;
+    padding: 5px 9px;
     transition: color 0.3s ease, background-color 0.3s ease;
-    color: #ff6b6b;;
-    min-width: 50px;
-    min-height: 50px;
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
     font-size: 1.8rem;
     border-radius: 4px;
     gap: 9px;

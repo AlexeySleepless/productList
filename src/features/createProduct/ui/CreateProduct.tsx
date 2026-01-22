@@ -1,5 +1,10 @@
-import { productsApi, ProductTypeAutocomplete } from '@entities/product';
-import { Button, Drawer, TextField } from '@mui/material';
+import {
+    ProductFavorite,
+    ProductImportance,
+    productsApi,
+    ProductTypeAutocomplete,
+} from '@entities/product';
+import { Box, Button, Drawer, TextField } from '@mui/material';
 import type React from 'react';
 import { useRef, useState } from 'react';
 import type { TNewProduct } from '../model/types';
@@ -85,6 +90,34 @@ export const CreateProduct: React.FunctionComponent<IСreateProductProps> = ({
                         }));
                     }}
                 />
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        gap: '10px',
+                        flexWrap: 'wrap',
+                    }}
+                >
+                    <ProductImportance
+                        productImprotance={data.important}
+                        applyNewImportance={(value: boolean) => {
+                            setData(data => ({
+                                ...data,
+                                important: value,
+                            }));
+                        }}
+                    />
+                    <ProductFavorite
+                        productFavorite={data.favorite}
+                        applyNewFavorite={(value: boolean) => {
+                            setData(data => ({
+                                ...data,
+                                favorite: value,
+                            }));
+                        }}
+                    />
+                </Box>
+
                 <Button
                     variant="outlined"
                     onClick={() => {

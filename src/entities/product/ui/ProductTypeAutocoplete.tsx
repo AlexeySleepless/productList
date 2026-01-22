@@ -53,7 +53,7 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
     return (
         <>
             <Button
-                variant="text"
+                variant="outlined"
                 ref={buttonRef}
                 color="primary"
                 sx={{
@@ -62,6 +62,8 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
                     fontWeight: 400,
                     fontSize: '1rem',
                     lineHeight: 1.5,
+                    borderColor: localType ? null : 'rgba(0, 0, 0, 0.23)',
+                    minHeight: '42px',
                 }}
                 onClick={() => {
                     setOpen(true);

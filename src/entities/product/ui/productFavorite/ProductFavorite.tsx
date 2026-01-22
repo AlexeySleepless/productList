@@ -13,7 +13,7 @@ export const ProductFavorite: React.FunctionComponent<
         <>
             <CheckBox
                 checked={productFavorite}
-                onClick={e => {
+                onChange={e => {
                     e.stopPropagation();
                     applyNewFavorite?.(!productFavorite);
                 }}
