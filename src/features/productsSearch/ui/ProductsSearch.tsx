@@ -6,26 +6,24 @@ import {
     useTheme,
 } from '@mui/material';
 import { Close, Search } from '@mui/icons-material';
-import type { IFilters } from '../model/types';
 import { useState, type ChangeEvent } from 'react';
 import { useDebounce } from '@shared/lib/restUtils';
 
-interface IProductsFilters {
-    filters: IFilters;
-    setFilters: (newFilters: IFilters) => void;
+interface IProductsSearch {
+    searchQuery: string;
+    setQuery: (newQuery: string) => void;
 }
 
-export const ProductsFilters: React.FunctionComponent<IProductsFilters> = ({
-    filters,
-    setFilters,
+export const ProductsSearch: React.FunctionComponent<IProductsSearch> = ({
+    searchQuery,
+    setQuery,
 }) => {
-    const { searchQuery } = filters;
     const [uiQuery, setUiQuery] = useState<string>(searchQuery);
-    const debounceSetFilters = useDebounce(setFilters, 50);
+    const debounceSetQuery = useDebounce(setQuery, 50);
 
     const setNewQuery = (searchQuery: string): void => {
         setUiQuery(searchQuery);
-        debounceSetFilters({ ...filters, searchQuery });
+        debounceSetQuery(searchQuery);
     };
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const searchQuery = event.target.value;

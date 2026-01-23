@@ -64,6 +64,7 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
                     lineHeight: 1.5,
                     borderColor: localType ? null : 'rgba(0, 0, 0, 0.23)',
                     minHeight: '42px',
+                    textTransform: 'none',
                 }}
                 onClick={() => {
                     setOpen(true);

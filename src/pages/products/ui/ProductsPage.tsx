@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
-import { ProductsFilters, type IFilters } from '@features/productsFilter';
-import { sorts } from '@features/productsFilter/model/types';
 import { productsApi, type IProduct } from '@entities/product';
 import { useLastError, useManageModal } from '@shared/lib/uiUtils';
 import { ErrorAlert } from '@shared/ui/errorAlert';
@@ -11,11 +9,12 @@ import {
     TriggerContext,
     type ITriggerContext,
 } from '@widgets/productsList';
+import type { IControls } from '@widgets/productControls/model/types';
+import { ProductsSearch } from '@features/productsSearch';
 
 export const ProductsPage: React.FunctionComponent = () => {
-    const [filters, setFilters] = useState<IFilters>({
+    const [controls, setControls] = useState<IControls>({
         searchQuery: '',
-        sortType: sorts.NONE,
     });
 
     const { data } = productsApi.useFetchAllProductsQuery('', {
@@ -25,7 +24,6 @@ export const ProductsPage: React.FunctionComponent = () => {
     const { order } = data ?? { order: [] };
 
     const { openFlag, errorMessage, closeError, triggerError } = useLastError();
-
     const { open, message, triggerConfirm, confirmAction, closeConfirm } =
         useManageModal();
 
@@ -46,7 +44,7 @@ export const ProductsPage: React.FunctionComponent = () => {
 
         order.forEach(product => {
             const lowerLabel = product.label.toLowerCase();
-            const lowerQuery = filters.searchQuery.toLowerCase();
+            const lowerQuery = controls.searchQuery.toLowerCase();
             if (!lowerLabel.includes(lowerQuery)) {
                 return;
             }
@@ -58,7 +56,7 @@ export const ProductsPage: React.FunctionComponent = () => {
         });
 
         return [checked, uncheked];
-    }, [order, filters.searchQuery]);
+    }, [order, controls.searchQuery]);
 
     return (
         <Box
@@ -84,7 +82,12 @@ export const ProductsPage: React.FunctionComponent = () => {
                 executeFn={confirmAction}
                 message={message}
             />
-            <ProductsFilters {...{ filters, setFilters }} />
+            <ProductsSearch
+                searchQuery={controls.searchQuery}
+                setQuery={newQuery =>
+                    setControls({ ...controls, searchQuery: newQuery })
+                }
+            />
             <TriggerContext.Provider value={triggerContextData}>
                 <ProductsList
                     {...{
