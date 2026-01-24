@@ -1,21 +1,23 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Box } from '@mui/material';
 import { productsApi, type IProduct } from '@entities/product';
 import { useLastError, useManageModal } from '@shared/lib/uiUtils';
 import { ErrorAlert } from '@shared/ui/errorAlert';
 import { ConfirmModal } from '@shared/ui/confirmModal';
 import {
+    checkedSplit,
     ProductsList,
     TriggerContext,
     type ITriggerContext,
 } from '@widgets/productsList';
-import type { IControls } from '@widgets/productControls/model/types';
-import { ProductsSearch } from '@features/productsSearch';
+import { useAppSelector } from '@shared/lib/store';
+import { ProductsControl } from '@widgets/productsControls';
+import { getPresetSearchFunc } from '@features/productsSearch';
 
 export const ProductsPage: React.FunctionComponent = () => {
-    const [controls, setControls] = useState<IControls>({
-        searchQuery: '',
-    });
+    const searchQuery = useAppSelector(
+        state => state.productsControlReducer.searchQuery,
+    );
 
     const { data } = productsApi.useFetchAllProductsQuery('', {
         selectFromResult: ({ data }) => ({ data }),
@@ -39,24 +41,9 @@ export const ProductsPage: React.FunctionComponent = () => {
     );
 
     const [checked, unchecked] = useMemo<[IProduct[], IProduct[]]>(() => {
-        const checked: IProduct[] = [];
-        const uncheked: IProduct[] = [];
-
-        order.forEach(product => {
-            const lowerLabel = product.label.toLowerCase();
-            const lowerQuery = controls.searchQuery.toLowerCase();
-            if (!lowerLabel.includes(lowerQuery)) {
-                return;
-            }
-            if (product.isChecked) {
-                checked.push(product);
-            } else {
-                uncheked.push(product);
-            }
-        });
-
-        return [checked, uncheked];
-    }, [order, controls.searchQuery]);
+        const searchFn = getPresetSearchFunc(searchQuery);
+        return checkedSplit(order, searchFn);
+    }, [order, searchQuery]);
 
     return (
         <Box
@@ -82,12 +69,7 @@ export const ProductsPage: React.FunctionComponent = () => {
                 executeFn={confirmAction}
                 message={message}
             />
-            <ProductsSearch
-                searchQuery={controls.searchQuery}
-                setQuery={newQuery =>
-                    setControls({ ...controls, searchQuery: newQuery })
-                }
-            />
+            <ProductsControl />
             <TriggerContext.Provider value={triggerContextData}>
                 <ProductsList
                     {...{
