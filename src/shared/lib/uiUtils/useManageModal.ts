@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 interface IParams {
     openFlag?: boolean;
     initMessage?: string;
@@ -15,14 +15,17 @@ export const useManageModal = ({
     );
     const [message, setMessage] = useState<string>(initMessage);
 
-    const triggerConfirm = (func: () => Promise<void>, m: string) => {
-        setMessage(m);
-        setConfirmAction(() => func);
-        setOpen(true);
-    };
+    const triggerConfirm = useCallback(
+        (func: () => Promise<void>, m: string) => {
+            setMessage(m);
+            setConfirmAction(() => func);
+            setOpen(true);
+        },
+        [],
+    );
 
-    const closeConfirm = () => {
+    const closeConfirm = useCallback(() => {
         setOpen(false);
-    };
+    }, []);
     return { open, message, triggerConfirm, confirmAction, closeConfirm };
 };

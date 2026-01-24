@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Box } from '@mui/material';
 import { productsApi, type IProduct } from '@entities/product';
 import { useLastError, useManageModal } from '@shared/lib/uiUtils';
@@ -29,13 +29,10 @@ export const ProductsPage: React.FunctionComponent = () => {
     const { open, message, triggerConfirm, confirmAction, closeConfirm } =
         useManageModal();
 
-    const memoTriggerConfirm = useCallback(triggerConfirm, []);
-    const memoTriggerError = useCallback(triggerError, []);
-
     const triggerContextData = useMemo<ITriggerContext>(
         () => ({
-            triggerConfirm: memoTriggerConfirm,
-            triggerError: memoTriggerError,
+            triggerConfirm,
+            triggerError,
         }),
         [],
     );
