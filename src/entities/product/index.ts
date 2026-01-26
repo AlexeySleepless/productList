@@ -6,3 +6,4 @@ export { ProductTypeAutocomplete } from './ui/ProductTypeAutocoplete';
 export { ProductImportance } from './ui/productImportance/ProductImportance';
 export { useProductMutation } from './lib/useProductMutation';
 export { ProductFavorite } from './ui/productFavorite/ProductFavorite';
+export { useUnicTypes } from './lib/useUnicTypes';

@@ -45,7 +45,7 @@ export const ProductsPage: React.FunctionComponent = () => {
     return (
         <Box
             sx={{
-                maxWidth: 500,
+                maxWidth: 700,
                 margin: '0px auto',
                 p: 2,
                 bgcolor: 'transparent',

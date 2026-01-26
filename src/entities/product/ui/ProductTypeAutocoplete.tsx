@@ -6,9 +6,7 @@ import {
     type ButtonBaseProps,
 } from '@mui/material';
 import { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { selectUniqueProductTypes } from '../api/selectors';
-import { shallowEqual } from 'react-redux';
+import { useUnicTypes } from '../lib/useUnicTypes';
 
 interface IProductTypeAutocompleteProps extends ButtonBaseProps {
     productType?: string;
@@ -26,10 +24,7 @@ export const ProductTypeAutocomplete: React.FunctionComponent<
     const initType = productType ?? '';
     const [localType, setLocalType] = useState<string>(initType);
 
-    const productTypes: string[] = useSelector(
-        selectUniqueProductTypes,
-        shallowEqual,
-    );
+    const productTypes = useUnicTypes();
     const inputRef = useRef<HTMLInputElement | null>(null);
     const buttonRef = useRef<HTMLButtonElement | null>(null);
 
