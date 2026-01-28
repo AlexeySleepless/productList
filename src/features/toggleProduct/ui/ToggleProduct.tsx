@@ -1,5 +1,6 @@
 import { useProductMutation, type IProduct } from '@entities/product';
-import { CheckBox } from '@shared/ui/checkBox';
+import { DefaultCheckBox } from '@shared/ui/checkBox';
+import classes from './ToggleProduct.module.css';
 
 interface IToggleProductProps {
     product: IProduct;
@@ -25,7 +26,11 @@ export const ToggleProduct: React.FunctionComponent<IToggleProductProps> = ({
 
     return (
         <>
-            <CheckBox checked={isChecked} onChange={checkBoxHandler} />
+            <DefaultCheckBox
+                checked={isChecked}
+                onChange={checkBoxHandler}
+                checkedClassName={classes.checked}
+            />
         </>
     );
 };
